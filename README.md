@@ -1,16 +1,29 @@
-## Hi there 👋
+## Getting Started
 
-<!--
-**RoleInstructor/RoleInstructor** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+### Using the MEF Framework
+To launch the MEF framework application:
+```bash
+cd app/
+python app.py
 
-Here are some ideas to get you started:
+### Generating Evaluation-Interaction Data Pairs
+cd src/
+python <metric_name>_eval.py  # Replace <metric_name> with your target metric
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Generating Updated Interactions with RoleInstructor
+cd src/
+python run_roleinstructor.py
+
+### Directory Structure
+
+├── app/               # MEF framework application
+│   └── app.py         # Main application entry point
+├── src/               # Data processing scripts
+│   ├── *_eval.py      # Evaluation pair generators (e.g., accuracy_eval.py)
+│   └── run_roleinstructor.py  # Interaction data updater
+└── ...                # Other project files
+
+## Note
+1. Ensure all dependencies are installed before running scripts
+2. Replace <metric_name> in evaluation scripts with your specific metric name
+3. Input/output configurations may require adjustment in script parameters
