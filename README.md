@@ -20,7 +20,7 @@ python run_roleinstructor.py
 ```
 
 ### Directory Structure
-
+.
 ├── app/               # MEF framework application
 │   └── app.py         # Main application entry point
 ├── src/               # Data processing scripts
