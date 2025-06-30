@@ -63,7 +63,7 @@ setting = {
 model_token_limits = {"gpt-4o":128000, "gpt-4o-mini":16385,'gpt-4-1106-preview':100000,'gpt-3.5-turbo-1106':16385,'deepseek-reasoner':64000,'doubao-1-5-pro-256k-250115':256000,'doubao-1-5-pro-32k-character-250228':32000,'qwen-max-2025-01-25':32768,'claude-3-7-sonnet-20250219':200000,'gemini-2.5-pro-exp-03-25':100000}
 USER_NAME = "主角玩家" # The name you want to use when interviewing the agent.
 selected_gpt_model = setting['Selected_gpt_model']
-LLM = ChatOpenAI(model=selected_gpt_model,max_tokens=setting['Max_tokens'],temperature = setting['temperature'],api_key='') # Can be any LLM you want.
+LLM = ChatOpenAI(model=selected_gpt_model,max_tokens=setting['Max_tokens'],temperature = setting['temperature']) # Can be any LLM you want.
 global_output_list = []
 numbers = [str(i) for i in range(10)]
 lowercase_letters = list(string.ascii_lowercase)
