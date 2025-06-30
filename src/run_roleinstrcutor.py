@@ -35,14 +35,14 @@ from collections import Counter, defaultdict
 import warnings
 warnings.filterwarnings("ignore")
 setting = {
-"Cooperation_script": True,   # 修改1：是否为合作类，是则True
+"Cooperation_script": True,  
 "Retrieval" : True,
 "Recent_observation" : True,
 "Information_Supplement": True,
 "Two_Step_Characterized":False,
 "Selected_gpt_model" : "doubao-pro-32k-241215",
 "Max_tokens" : 4000,
-"Play_no." : 'play4_inpc',   # 修改2：评测使用的剧本
+"Play_no." : 'play4_inpc',   
 "Project_path" : os.path.abspath('.').replace("\\", "/"),
 "k" : 5,
 "temperature": 0.8,
@@ -54,13 +54,9 @@ setting = {
 
 }
 
-# 修改3：是否需要设置max_token
 model_token_limits = {"gpt-4o":16385, "gpt-4o-mini":16385,'gpt-4-1106-preview':100000,'doubao-pro-32k-241215':32000}
-# 修改4：修改API名称以及对应的API key
-os.environ["OPENAI_API_KEY"] = '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'
 USER_NAME = "主角玩家" # The name you want to use when interviewing the agent.
 selected_gpt_model = setting['Selected_gpt_model']
-# 修改5：修改要评测的模型初始化方式
 LLM = ChatOpenAI(model=selected_gpt_model,max_tokens=setting['Max_tokens'],temperature = setting['temperature'],base_url="https://ark.cn-beijing.volces.com/api/v3",api_key='812c3d41-4410-4d0f-bbb6-0753bf806c37') # Can be any LLM you want.
 global_output_list = []
 numbers = [str(i) for i in range(10)]
