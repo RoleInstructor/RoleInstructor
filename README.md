@@ -5,6 +5,7 @@ To launch the MEF framework application:
 ```bash
 cd app/
 python app.py
+```
 
 ### Generating Evaluation-Interaction Data Pairs
 cd src/
