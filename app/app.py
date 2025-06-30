@@ -12,7 +12,6 @@ import tempfile
 import re
 from pydantic import BaseModel, Field
 
-# 主模块和核心组件
 from langchain.chains import LLMChain
 from langchain_core.language_models import BaseLanguageModel
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, HumanMessagePromptTemplate
@@ -20,14 +19,11 @@ from langchain_core.documents import Document
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.output_parsers import  CommaSeparatedListOutputParser
 from langchain_core.runnables import RunnableSequence
-# 社区包中的组件（原langchain-community）
 from langchain_community.docstore import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
 
-# 独立集成包（如OpenAI）
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
-# 输出模式定义（ResponseSchema可能需要自定义）
 
 
 from pydantic import BaseModel, Field
@@ -45,14 +41,14 @@ import numpy as np
 from collections import Counter, defaultdict
 
 setting = {
-"Cooperation_script": True,   # 修改1：是否为合作类，是则True
+"Cooperation_script": True,   
 "Retrieval" : True,
 "Recent_observation" : True,
 "Information_Supplement": True,
 "Two_Step_Characterized":False,
 "Selected_gpt_model" : "gpt-4o",
 "Max_tokens" : 5500,
-"Play_no." : 'play4_inpc',   # 修改2：评测使用的剧本
+"Play_no." : 'play4_inpc',   
 "Project_path" : os.path.abspath('.').replace("\\", "/"),
 "k" : 5,
 "temperature": 0.8,
@@ -64,13 +60,9 @@ setting = {
 
 }
 
-# 修改3：是否需要设置max_token
 model_token_limits = {"gpt-4o":128000, "gpt-4o-mini":16385,'gpt-4-1106-preview':100000,'gpt-3.5-turbo-1106':16385,'deepseek-reasoner':64000,'doubao-1-5-pro-256k-250115':256000,'doubao-1-5-pro-32k-character-250228':32000,'qwen-max-2025-01-25':32768,'claude-3-7-sonnet-20250219':200000,'gemini-2.5-pro-exp-03-25':100000}
-# 修改4：修改API名称以及对应的API key
-os.environ["OPENAI_API_KEY"] = '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'
 USER_NAME = "主角玩家" # The name you want to use when interviewing the agent.
 selected_gpt_model = setting['Selected_gpt_model']
-# 修改5：修改要评测的模型初始化方式
 LLM = ChatOpenAI(model=selected_gpt_model,max_tokens=setting['Max_tokens'],temperature = setting['temperature'],api_key='') # Can be any LLM you want.
 global_output_list = []
 numbers = [str(i) for i in range(10)]
