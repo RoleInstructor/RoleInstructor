@@ -2,7 +2,7 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
 import time
 
-client = ChatOpenAI(model_name="gpt-4o", temperature=0.1, openai_api_key="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")
+client = ChatOpenAI(model_name="gpt-4o", temperature=0.1, openai_api_key="YOUR OPENAI KEY")
 
 def evaluate_answer(question, answer):
     prompt = f"""请判断以下回答是否回答了全部的问题，且回答的内容都跟问题有关：
