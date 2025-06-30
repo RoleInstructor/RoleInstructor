@@ -35,11 +35,8 @@ def parse_dialogues(file_path):
             if not line:
                 continue
 
-            # 检测新段落开始
             if line.startswith(("（问题）", "（回答）")):
-                # 保存前一个段落（增加空值检查）
                 if current_speaker and current_type:
-                    # 确保字典结构存在
                     if current_speaker not in dialogues:
                         dialogues[current_speaker] = {'questions': [], 'answers': []}
                     full_content = "".join(current_content).strip('"')
@@ -47,33 +44,26 @@ def parse_dialogues(file_path):
                     target_list.append(full_content)
                     current_content = []
 
-                # 解析新段落类型
                 current_type = 'question' if line.startswith("（问题）") else 'answer'
                 
-                # 精确提取说话者（修复正则表达式）
                 speaker_match = re.search(r"（(?:问题|回答)）\s*([^对]+?)\s*(?:对.*?)?(?:说|问)：", line)
                 if speaker_match:
                     current_speaker = speaker_match.group(1).strip()
-                    # 新增：立即初始化数据结构
                     if current_speaker not in dialogues:
                         dialogues[current_speaker] = {'questions': [], 'answers': []}
-                    # 过滤主持人
                     if current_speaker == "主持人":
                         current_speaker = None
                         current_type = None
                         current_content = []
                         continue
-                    # 提取内容部分
                     content_part = line.split("：", 1)[-1].strip('" ')
                     current_content.append(content_part)
                 else:
-                    current_speaker = None  # 无法解析时重置
+                    current_speaker = None 
 
-            # 处理内容续行（增加空值检查）
             elif current_speaker and current_type and current_speaker in dialogues:
                 current_content.append(line)
 
-        # 处理最后一个段落（增加空值检查）
         if current_speaker and current_type and current_speaker in dialogues:
             full_content = "".join(current_content).strip('"')
             dialogues[current_speaker]['questions' if current_type == 'question' else 'answers'].append(full_content)
@@ -81,17 +71,7 @@ def parse_dialogues(file_path):
     return dialogues
 
 
-# 保持原有函数完全不变
 def split_response(response):
-    """
-    将回答内容按句号和感叹号分割成句子。
-    
-    参数:
-        response (str): 回答内容。
-        
-    返回:
-        list: 分割后的句子列表。
-    """
     sentences = []
     temp = ""
     for char in response:
@@ -99,48 +79,33 @@ def split_response(response):
         if char in ("。", "！"):
             sentences.append(temp.strip())
             temp = ""
-    # 处理最后一个未分割的句子
     if temp:
         sentences.append(temp.strip())
     return sentences
 
 def split_all_responses(dialogues):
-    """
-    将每个人的所有回答按句号和感叹号分割，并按每两句话合并。
-    
-    参数:
-        dialogues (dict): 原始对话数据（包含questions和answers）
-        
-    返回:
-        dict: 结构不变，仅answers被处理
-    """
     processed = {}
     for speaker, data in dialogues.items():
-        # 只处理回答部分
         split_answers = []
         for answer in data['answers']:
             sentences = split_response(answer)
             combined = [" ".join(sentences[i:i+2]) for i in range(0, len(sentences), 2)]
             split_answers.extend(combined)
         
-        # 保持问题原样
         processed[speaker] = {
-            'questions': data['questions'],  # 保持完整
+            'questions': data['questions'], 
             'answers': split_answers
         }
     return processed
 
 
 def save_parsed_results(split_dialogues, output_file):
-    """将解析和分割后的结果保存到文件"""
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write("="*40 + " 解析结果报告 " + "="*40 + "\n\n")
         
         for speaker, data in split_dialogues.items():
-            # 角色标题
             f.write(f"【{speaker}】\n")
             
-            # 问题输出
             if data['questions']:
                 f.write(f"◆ 问题列表（共{len(data['questions'])}个）:\n")
                 for i, q in enumerate(data['questions'], 1):
@@ -148,7 +113,6 @@ def save_parsed_results(split_dialogues, output_file):
             else:
                 f.write("◆ 未提出任何问题\n")
             
-            # 回答输出
             if data['answers']:
                 f.write(f"\n◇ 回答列表（共{len(data['answers'])}段）:\n")
                 for i, a in enumerate(data['answers'], 1):
@@ -161,9 +125,7 @@ def save_parsed_results(split_dialogues, output_file):
         f.write("="*40 + " 报告结束 " + "="*40)
 
 
-# 增强版任务类型提取
 def extract_task_types(task_str):
-    """从任务描述中提取结构化任务信息"""
     task_types = []
     for part in task_str.split('。'):
         part = part.strip()
@@ -175,7 +137,6 @@ def extract_task_types(task_str):
             task_types.append(('隐瞒', part[4:]))
     return task_types
 
-# 整合角色数据的评估函数
 def evaluate_with_context(speaker, response, task_type, content_type, content, task_content):
 
     chat = ChatOpenAI(model_name='gpt-4o',temperature=0.1)
@@ -198,7 +159,6 @@ def evaluate_with_context(speaker, response, task_type, content_type, content, t
 原因：此处阐述原因
 结论：此处输出是或否"""
 
-    #print(prompt)
     for attempt in range(max_retries):
         try:
             message = HumanMessage(content=prompt)
@@ -214,31 +174,18 @@ def evaluate_with_context(speaker, response, task_type, content_type, content, t
             return "失败"
     print("已达到最大重试次数，评估失败。")
     return "失败"
-def main():
-    os.environ["OPENAI_API_KEY"] = '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'
-    
-    # 输入文件路径
+def main():    
     input_file = "run6_4o.txt"
     output_file = "4o_script_6_task_eval.txt"
 
-    # 解析对话文件
     print("开始解析对话文件...")
     dialogues = parse_dialogues(input_file)
     print("解析完成。")
 
-    # 分割回答
     print("开始分割回答...")
     split_dialogues = split_all_responses(dialogues)
     print("分割完成。")
 
-    # 3. 保存解析结果到文件
-    #debug_file = "parse_debug.txt"
-    #print("正在生成解析报告...")
-    #save_parsed_results(split_dialogues, debug_file)
-    #print(f"解析报告已保存至: {debug_file}")
-    
-
-    # 存储评估结果
     results = []
     
     for speaker in split_dialogues:
@@ -248,7 +195,6 @@ def main():
         data = character_data[speaker]
         tasks = extract_task_types(data['task'])
         
-        # 初始化得分统计
         score_card = {
             '总得分': 0,
             '任务明细': []
@@ -256,9 +202,7 @@ def main():
         
         print(f"\n评估 {speaker}...")
         
-        # 遍历每个子任务
         for task_type, task_desc in tasks:
-            # 选择评估内容类型
             content_type = '问题' if task_type == "查明" else '回答'
             contents = split_dialogues[speaker]['questions' if task_type == "查明" else 'answers']
             
@@ -278,8 +222,6 @@ def main():
                     task_content=task_desc
                 )
                 
-                #
-                # 计算得分
                 if task_type == "查明":
                     if "是" in evaluation :
                         score = 1
@@ -298,7 +240,6 @@ def main():
                 
                 task_score += score
                 
-                # 记录明细
                 results.append(
                     f"角色: {speaker}\n"
                     f"任务类型: {task_type}\n"
@@ -308,7 +249,6 @@ def main():
                     "---"
                 )
             
-            # 记录任务统计
             score_card['总得分'] += task_score
             score_card['任务明细'].append({
                 '任务描述': task_desc,
@@ -319,7 +259,6 @@ def main():
                 '得分': task_score
             })
         
-        # 生成总结报告
         summary = [
             f"\n【{speaker}综合评估】",
             f"总得分: {score_card['总得分']}",
@@ -337,7 +276,6 @@ def main():
         results.extend(summary)
         results.append("------------------\n")
 
-    # 保存结果
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write("\n".join(results))
     print(f"\n评估结果已保存到 {output_file}")
