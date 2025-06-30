@@ -34,14 +34,14 @@ import numpy as np
 from collections import Counter, defaultdict
 
 setting = {
-"Cooperation_script": True,   # 修改1：是否为合作类，是则True
+"Cooperation_script": True,  
 "Retrieval" : True,
 "Recent_observation" : True,
 "Information_Supplement": True,
 "Two_Step_Characterized":False,
 "Selected_gpt_model" : "gpt-4o",
 "Max_tokens" : 5500,
-"Play_no." : 'play6_inpc',   # 修改2：评测使用的剧本
+"Play_no." : 'play6_inpc',   
 "Project_path" : os.path.abspath('.').replace("\\", "/"),
 "k" : 5,
 "temperature": 0.8,
@@ -53,13 +53,9 @@ setting = {
 
 }
 
-# 修改3：是否需要设置max_token
 model_token_limits = {"gpt-4o":16385, "gpt-4o-mini":16385,'gpt-4-1106-preview':100000,'gpt-3.5-turbo-1106':16385}
-# 修改4：修改API名称以及对应的API key
-os.environ["OPENAI_API_KEY"] = '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'
 USER_NAME = "主角玩家" # The name you want to use when interviewing the agent.
 selected_gpt_model = setting['Selected_gpt_model']
-# 修改5：修改要评测的模型初始化方式
 LLM = ChatOpenAI(model=selected_gpt_model,max_tokens=setting['Max_tokens'],temperature = setting['temperature']) # Can be any LLM you want.
 global_output_list = []
 numbers = [str(i) for i in range(10)]
