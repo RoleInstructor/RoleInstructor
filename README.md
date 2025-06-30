@@ -12,11 +12,13 @@ python app.py
 cd src/
 python <metric_name>_eval.py  # Replace <metric_name> with your target metric
 ```
+
 ### Generating Updated Interactions with RoleInstructor
 ```bash
 cd src/
 python run_roleinstructor.py
 ```
+
 ### Directory Structure
 
 ├── app/               # MEF framework application
