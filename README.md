@@ -20,14 +20,14 @@ python run_roleinstructor.py
 ```
 
 ### Directory Structure
-.
+```
 ├── app/               # MEF framework application
 │   └── app.py         # Main application entry point
 ├── src/               # Data processing scripts
 │   ├── *_eval.py      # Evaluation pair generators (e.g., accuracy_eval.py)
 │   └── run_roleinstructor.py  # Interaction data updater
 └── ...                # Other project files
-
+```
 ## Note
 1. Ensure all dependencies are installed before running scripts
 2. Replace <metric_name> in evaluation scripts with your specific metric name
